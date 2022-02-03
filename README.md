@@ -1,7 +1,7 @@
 # Snowbot
-A bot to draw Rocket League snow art. Runs on Gcode like a CNC or 3D printer. Currently uses state-setting to travel but might be more intelligent in the future.
+A bot to draw Rocket League snow art. Runs on gcode like a CNC or 3D printer. Currently uses state-setting to travel but might be more intelligent in the future.
 ## How to set up Cura
-This bot uses gcode sliced by [Cura](https://ultimaker.com/software/ultimaker-cura) to run. It must be sliced using Cura so the g-code comments are predictable. Until I get around to adding a .curaprofile, use the settings below to slice an image or model. Even though UE says that 1uu=10cm, this uses 1uu=1mm (in gcode) for simplicity. This will draw the bottom layer.
+This bot uses gcode sliced by [Cura](https://ultimaker.com/software/ultimaker-cura) to run. It must be sliced using Cura so the gcode comments are predictable. Until I get around to adding a .curaprofile, use the settings below to slice an image or model. Even though UE says that 1uu=10cm, this uses 1uu=1mm (in gcode) for simplicity. This will draw the bottom layer.
 ### Printer settings:
 - size: X8192 Y10240
 - origin at center
