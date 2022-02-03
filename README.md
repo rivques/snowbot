@@ -1,43 +1,23 @@
-# VirxERLU
-
-Big thanks to ddthj/GoslingUtils for the basis of VirxERLU. However, VirxERLU improves upon many things. This includes pathfinding, shot validation, and aerials. It also adds many things, like support for TMCP and a GUI for debugging. This also improves on the general performance of the agent.
-
-+ [RLBot](http://www.rlbot.org/)
-+ [VirxERLU Wiki](https://github.com/VirxEC/VirxERLU/wiki)
-+ [VirxEC Discord](https://discord.gg/5ARzYRD2Na) - Ask your questions here!
-+ [RLBot Wiki](https://github.com/RLBot/RLBot/wiki)
-+ [RLBot Discord](https://discord.gg/rlbot)
-+ [RLBot Youtube](https://www.youtube.com/channel/UCu8scB_k94Kh-iO979QTDJA)
-+ [VirxEC Showcase](https://www.virxcase.dev)
-+ [VirxERLU on VirxEC Showcase](https://virxerlu.virxcase.dev/)
-+ [VirxEB on VirxEC Showcase](https://virxeb.virxcase.dev/)
-
-## About
-
-+ [Main GitHub page](https://github.com/VirxEC/VirxERLU)
-+ [Cloning to another repository](https://github.com/VirxEC/VirxERLU/generate)
-+ [Get the zip](https://github.com/VirxEC/VirxERLU/archive/master.zip)
-
-VirxERLU is a series of utilities for RLBot.
-All code in this repositry is in the public domain, so you can edit and distribute the code however you want to.
-
-I made VirxERLU because it forces me to keep innovating on my bot in order to stay ahead of the curve. Any code in my bot [VirxEB](https://github.com/VirxEC/VirxEB) is NOT in the public domain.
-
-VirxERLU will be updated after every tournament with the latest, *stable* features of VirxEB.
-
-## Things to delete
-
-In the root folder, you can delete `CNAME` and `_config.yml`.
-
-## Wiki
-
-The wiki is the best way to get general information about VirxERLU.
-
-+ [github.com/VirxEC/VirxERLU/wiki](https://github.com/VirxEC/VirxERLU/wiki)
-
-## Tutorials
-
-If you're going to use VirxERLU, be sure to watch the GoslingUtils tutorial first. The VirxERLU tutorial is only for the differences between the utils.
-
-+ RLBot/GoslingUtils tutorial: [youtube.com/watch?v=lPkID_IH88U](https://www.youtube.com/watch?v=lPkID_IH88U)
-+ VirxERLU tutorials: [youtube.com/playlist?list=PLeo0zkmzSE-UUFV-bd2vWtqiqe2cjaQNf](https://www.youtube.com/playlist?list=PLeo0zkmzSE-UUFV-bd2vWtqiqe2cjaQNf)
+# Snowbot
+A bot to draw Rocket League snow art. Runs on Gcode like a CNC or 3D printer. Currently uses state-setting to travel but might be more intelligent in the future.
+## How to set up Cura
+This bot uses gcode sliced by [Cura](https://ultimaker.com/software/ultimaker-cura) to run. It must be sliced using Cura so the g-code comments are predictable. Until I get around to adding a .curaprofile, use the settings below to slice an image or model. Even though UE says that 1uu=10cm, this uses 1uu=1mm (in gcode) for simplicity. This will draw the bottom layer.
+### Printer settings:
+- size: X8192 Y10240
+- origin at center
+- 1 extruder
+- height doesnt matter,should be big
+- no heated bed
+- marlin flavor
+- other settings dont matter
+### Profile settings:
+- At least one bottome layer
+- No bed adhesion
+- Walls: (coming soon after experimentation)
+## How to draw an image
+1. Slice your image/model and save it to disk somewhere. 
+2. With RLBot, start a game on a snowy map with only Snowbot, unlimited time, and gravity at super high (helps with infill speed).
+3. Select your gcode file with the tkinter interface and press go!
+## Statesetting
+This bot currently uses statesetting to travel and to move the ball out of the way. If I have the time I will add inteligent movement to jump and aerial from one spot to another.
+## 
