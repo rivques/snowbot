@@ -9,6 +9,7 @@ This bot uses gcode sliced by [Cura](https://ultimaker.com/software/ultimaker-cu
 - height doesnt matter,should be big
 - no heated bed
 - marlin flavor
+- no start gcode (z moves can throw off layer detection)
 - other settings dont matter
 ### Profile settings:
 - At least one bottome layer
