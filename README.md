@@ -14,6 +14,7 @@ This bot uses gcode sliced by [Cura](https://ultimaker.com/software/ultimaker-cu
 ### Profile settings:
 - At least one bottome layer
 - No bed adhesion
+- Layer height and initial layer height: 0.2 mm
 - Walls: (coming soon after experimentation)
 ## How to draw an image
 1. Slice your image/model and save it to disk somewhere. 

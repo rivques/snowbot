@@ -15,12 +15,24 @@ class Bot(VirxERLU):
         self.logger = logging.getLogger("SNOWBOT")
         self.logger.setLevel(logging.DEBUG)
 
-        self.layer_end_re = re.compile(r"^G(1|0)(?=.*Z(\d+(\.\d*)))")
-
-        # This is a shot between the opponent's goal posts
-        # NOTE When creating these, it must be a tuple of (left_target, right_target)
-        self.foe_goal_shot = (self.foe_goal.left_post, self.foe_goal.right_post)
-        # NOTE If you want to shoot the ball anywhere BUT between to targets, then make a tuple like (right_target, left_target) - I call this an anti-target
+        self.layer_end_re = re.compile(r"^G(1|0)(?=.*Z(\d+(\.\d*)))", flags=[re.IGNORECASE])
+        self.line_re = re.compile(r"^G(1|0)(?=.*x(\d+(\.\d*)))(?=.*y(\d+(\.\d*))).*", flags=[re.IGNORECASE])
+        self.type_re = re.compile(r";TYPE:(.*)", flags=[re.IGNORECASE])
+    
+    def load_gcode(filepath):
+        layer_started = False
+        self.logger.info(f"Loading gcode file {filepath}...")
+        with open(filepath) as f:
+            for line in f.readlines():
+                layer_mo = self.layer_end_re.match(line)
+                if not layer_started and layer_mo and int(layer_mo.group(2)) == 0.2:
+                    layer_started = True
+                    self.logger.info(f"First line of layer found: {line}")
+                    continue
+                if layer_mo and int(layer_mo.group(2)) == 0.4:
+                    self.logger.info(f"Last line of layer found: {line}")
+                    break
+                    
 
     def run(self):
         # NOTE This method is ran every tick
