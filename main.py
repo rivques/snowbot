@@ -59,9 +59,12 @@ class Bot(VirxERLU):
             while not self.current_instruction.valid:
                 self.current_instruction_num += 1
                 self.current_instruction = self.instructions[self.current_instruction_num]
+                self.logger.info(f"Selected gcode line number {self.current_instruction.line_number}...")
             if self.current_instruction.type is not None:
                 self.current_gcode_type = self.current_instruction.type
+                self.logger.info(f"gcode type is now {self.current_instruction.type}")
             elif self.current_instruction.is_travel:
+                self.logger.info(f"Teleporting to {self.current_instruction.x}, {self.current_instruction.y}")
                 car_state = CarState(physics=Physics(location=Vector3(self.current_instruction.y,self.current_instruction.y, None)))
                 game_state = GameState(cars={self.index: car_state})
                 self.set_game_state(game_state)
@@ -69,9 +72,11 @@ class Bot(VirxERLU):
                 # get a rotator pointing toward our destination
                 angle = arctan((self.me.location.y - self.current_instruction.y)/(self.me.location.x - self.current_instruction.x))
                 # point us that way
+                self.logger.info("Pointing at angle {angle*180/3.141592} deg...")
                 car_state = CarState(physics=Physics(rotation=Rotator(0, angle, 0)))
                 game_state = GameState(cars={self.index: car_state})
                 self.set_game_state(game_state)
+                self.logger.info(f"Driving to {self.current_instruction.x}, {self.current_instruction.y}...")
                 # go there
                 self.push(routines.goto(Vector(self.current_instruction.x, self.current_instruction.y), brake=True))
 
