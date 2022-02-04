@@ -1,3 +1,4 @@
+from numpy import arctan
 from gcodeinstruction import GcodeInstruction
 from util import routines, tools, utils
 from util.agent import Vector, VirxERLU, game_object, run_bot
@@ -66,9 +67,13 @@ class Bot(VirxERLU):
                 self.set_game_state(game_state)
             else:
                 # get a rotator pointing toward our destination
+                angle = arctan((self.me.location.y - self.current_instruction.y)/(self.me.location.x - self.current_instruction.x))
                 # point us that way
+                car_state = CarState(physics=Physics(rotation=Rotator(0, angle, 0)))
+                game_state = GameState(cars={self.index: car_state})
+                self.set_game_state(game_state)
                 # go there
-                self.push(routines.goto())
+                self.push(routines.goto(Vector(self.current_instruction.x, self.current_instruction.y), brake=True))
 
 
     def demolished(self):
