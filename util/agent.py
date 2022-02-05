@@ -19,7 +19,7 @@ from rlbot.utils.structures.game_data_struct import GameTickPacket
 TOURNAMENT_MODE = False
 
 # Make False to enable hot reloading, at the cost of the GUI
-EXTRA_DEBUGGING = False
+EXTRA_DEBUGGING = True
 
 if not TOURNAMENT_MODE and EXTRA_DEBUGGING:
     from gui import Gui

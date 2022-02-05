@@ -504,6 +504,9 @@ class goto:
 
         agent.dbg_2d(f"Distance to target: {round(distance_remaining)}")
         agent.line(self.target - Vector(z=500), self.target + Vector(z=500), (255, 0, 255))
+        if distance_remaining < 30:
+            agent.pop()
+            return
 
         if self.brake and (self.f_brake or distance_remaining * 0.95 < (agent.me.local_velocity().x ** 2 * -1) / (2 * brake_accel.x)):
             self.f_brake = True
@@ -530,8 +533,11 @@ class goto:
         direction = 1 if angle_to_target < 1.6 or agent.me.local_velocity().x > 1000 else -1
         agent.dbg_2d(f"Angle to target: {round(angle_to_target, 1)}")
 
-        velocity = defaultDrive(agent, (2300 if distance_remaining > 1280 or not self.slow else cap(distance_remaining * 2, 1200, 2300)) * direction, local_target)[1]
+        defaultThrottle(agent, (2300 if distance_remaining > 1280 or not self.slow else cap(distance_remaining * 2, 1200, 2300)) * direction)
         if distance_remaining < 2560: agent.controller.boost = False
+        if abs(agent.me.velocity.magnitude()) < 30:
+            agent.pop()
+            return
 
         # this is to break rule 1's with TM8'S ONLY
         # 251 is the distance between center of the 2 longest cars in the game, with a bit extra
@@ -544,15 +550,9 @@ class goto:
         elif self.rule1_timer != -1:
             self.rule1_timer = -1
 
-        dodge_time = distance_remaining / (abs(velocity) + dodge_impulse(agent)) - 0.8
-
         if agent.me.airborne:
             agent.push(recovery(self.target))
-        elif dodge_time >= 1.2 and agent.time - agent.me.land_time > 0.5:
-            if agent.me.boost < 48 and angle_to_target < 0.03 and (true_angle_to_target < 0.1 or distance_remaining > 4480) and velocity > 600:
-                agent.push(flip(agent.me.local_location(self.target)))
-            elif direction == -1 and velocity < 200:
-                agent.push(flip(agent.me.local_location(self.target), True))
+        
 
 
 class shadow:

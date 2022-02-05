@@ -19,6 +19,6 @@ class GcodeInstruction:
             if not line_mo:
                 self.valid = False
                 return
-            self.x = float(line_mo.group(2))
-            self.y = float(line_mo.group(4))
-            self.travel = "E" not in line
+            self.x = float(line_mo.group(2))*100
+            self.y = float(line_mo.group(4))*100
+            self.is_travel = line_mo.group(1) == "0"

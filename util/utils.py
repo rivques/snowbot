@@ -55,18 +55,8 @@ def defaultThrottle(agent: VirxERLU, target_speed, target_angles=None, local_tar
     if target_angles is not None and local_target is not None:
         turn_rad = turn_radius(abs(car_speed))
         agent.controller.handbrake = not agent.me.airborne and agent.me.velocity.magnitude() > 600 and (is_inside_turn_radius(turn_rad, local_target, sign(agent.controller.steer)) if abs(local_target.y) < turn_rad or car_speed > 1410 else abs(local_target.x) < turn_rad)
-
-    angle_to_target = abs(target_angles[1])
-
-    if target_speed < 0:
-        angle_to_target = math.pi - angle_to_target
-
-    if agent.controller.handbrake:
-        if angle_to_target > 2.6:
-            agent.controller.steer = sign(agent.controller.steer)
-            agent.controller.handbrake = False
-        else:
-            agent.controller.steer = agent.controller.yaw
+        
+        agent.controller.steer = agent.controller.yaw
 
     # Thanks to Chip's RLU speed controller for this
     # https://github.com/samuelpmish/RLUtilities/blob/develop/src/mechanics/drive.cc#L182
@@ -99,9 +89,9 @@ def defaultThrottle(agent: VirxERLU, target_speed, target_angles=None, local_tar
     # if the desired acceleration is big enough, use boost
     elif throttle_boost_transition < acceleration:
         agent.controller.throttle = 1
-        if not agent.controller.handbrake:
-            if t > 0 and angle_to_target < 1:
-                agent.controller.boost = True  # don't boost when we need to lose speed, we we're using handbrake, or when we aren't facing the target
+        # if not agent.controller.handbrake:
+        #     if t > 0 and angle_to_target < 1:
+        #         agent.controller.boost = True  # don't boost when we need to lose speed, we we're using handbrake, or when we aren't facing the target
 
     if car_speed < 0:
         agent.controller.throttle *= -1  # earlier we flipped the sign of the acceleration, so we have to flip the sign of the throttle for it to be correct

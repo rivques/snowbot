@@ -1,6 +1,6 @@
 from os import path
 from threading import Thread
-from tkinter import HORIZONTAL, BooleanVar, PhotoImage, StringVar, Tk, ttk
+from tkinter import END, HORIZONTAL, BooleanVar, PhotoImage, StringVar, Tk, filedialog, ttk
 from traceback import print_exc
 
 
@@ -17,12 +17,12 @@ class Gui(Thread):
 
         root.title("VirxEC/VirxERLU")
 
-        root.geometry("255x250")
+        root.geometry("255x500")
 
         title = ttk.Label(root, text=f"{self.agent.name} hosted by VirxERLU")
         title.pack()
 
-        author = ttk.Label(root, text=f"Bot by BotMaker (BotMaker/githubRepo)")
+        author = ttk.Label(root, text=f"Bot by rivques (rivques/snowbot)")
         author.pack()
 
         # Disable driving
@@ -129,9 +129,42 @@ class Gui(Thread):
         debug_ball_path_precision.set(self.agent.debug_ball_path_precision)
         debug_ball_path_precision.pack()
 
+        # gcode file selection
+
+        def set_select_playback():
+            self.agent.mode = "playback"
+            self.agent.select_playback_file = select_playback_file.get()
+            self.agent.handled_mode = False
+        
+        select_playback = ttk.Button(root, text="Select .gcode file", command=set_select_playback)
+        select_playback.pack()
+
+        select_playback_file = ttk.Entry(root)
+        select_playback_file.pack()
+        select_playback_file.insert(0, "playback_file_name")
+
+        def set_playback_file():
+            filename = filedialog.askopenfilename(initialdir=path.dirname(path.abspath(__file__)), title="Select GCODE file", filetypes=(("GCODE files", "*.gcode"), ("all files", "*.*")))
+            if filename is None or filename == "":
+                return
+            
+            select_playback_file.delete(0, END)
+            select_playback_file.insert(0, filename)
+        
+        select_playback_browse = ttk.Button(root, text="Browse", command=set_playback_file)
+        select_playback_browse.pack()
+
+        def on_click(event):
+            select_playback_file.delete(0, END)
+            select_playback_file.unbind("<Button-1>", on_click_id)
+
+        on_click_id = select_playback_file.bind("<Button-1>", on_click)
+
         self.stop = root.destroy
 
         try:
             root.mainloop()
         except Exception:
             print_exc()
+    
+
