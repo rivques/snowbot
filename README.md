@@ -1,5 +1,5 @@
 # Snowbot
-A bot to draw Rocket League snow art. Runs on gcode like a CNC or 3D printer. Currently uses state-setting to travel but might be more intelligent in the future.
+A bot to draw Rocket League snow art. Runs on gcode like a CNC or 3D printer. Currently uses state-setting to travel but might be more intelligent in the future. The bot works best with images with few colors, preferably silhouettes. It is far from perfect and may decide to put a line across your image if it feels like it, but it's good enough and it will definetly get a likeness across.
 ## How to set up Cura
 This bot uses gcode sliced by [Cura](https://ultimaker.com/software/ultimaker-cura) to run. It must be sliced using Cura so the gcode comments are predictable. Even though UE says that 1uu=10cm, this uses 1 gcode unit = 100uu so Cura can handle it. This will draw the bottom layer.
 ### Printer settings:
@@ -27,6 +27,11 @@ Use the profile `snowbot_solid.curaprofile`. To import it, press Ctrl+J to manag
 ## How to draw an image gcode
 1. Slice your image/model and save it to disk somewhere or use one of the images in the `tests` folder/
 2. With RLBot, start a game on a mannfield-snowy with only Snowbot, unlimited time, gravity at super high, and max score at one (so you can end the game and save the replay).
-3. Browse with the bot's interface and press select file!
+3. Browse with the bot's interface and press select file.
+4. Wait for the bot to finish. Be aware that many things will reset the progress, including opening the game settings.
+5. Take a screenshot of the art if you wish.
+6. If you want to save the replay, go into the state setting sasnbox in RLBot and drag the ball into the goal. This will end the game
+if you have set your mutators properly.
+7. After the game ends, you can save your replay.
 ## Statesetting
 This bot currently uses statesetting to travel and to move the ball out of the way. If I have the ~~time~~ motivation I will add inteligent movement to jump and aerial from one spot to another.
