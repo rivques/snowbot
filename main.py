@@ -136,7 +136,7 @@ class Bot(VirxERLU):
                 self.push(routines.goto(Vector(self.current_instruction.x, self.current_instruction.y), brake=True))
         else:
             if self.current_gcode_type == "WALL-INNER" and self.jump_tick == 0 and not self.me.airborne:
-                self.logger.info(f"Wall inner detected, attempting jump...")
+                self.logger.debug(f"Wall inner detected, attempting jump...")
                 self.controller.jump = True
             else:
                 self.controller.jump = False
