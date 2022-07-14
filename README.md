@@ -1,24 +1,32 @@
 # Snowbot
 A bot to draw Rocket League snow art. Runs on gcode like a CNC or 3D printer. Currently uses state-setting to travel but might be more intelligent in the future.
 ## How to set up Cura
-This bot uses gcode sliced by [Cura](https://ultimaker.com/software/ultimaker-cura) to run. It must be sliced using Cura so the gcode comments are predictable. Until I get around to adding a .curaprofile, use the settings below to slice an image or model. Even though UE says that 1uu=10cm, this uses 1 gcode unit = 100uu so Cura can handle it. This will draw the bottom layer.
+This bot uses gcode sliced by [Cura](https://ultimaker.com/software/ultimaker-cura) to run. It must be sliced using Cura so the gcode comments are predictable. Even though UE says that 1uu=10cm, this uses 1 gcode unit = 100uu so Cura can handle it. This will draw the bottom layer.
 ### Printer settings:
-- size: X8192 Y10240
+- size: X81.92mm Y102.40mm
 - origin at center
 - 1 extruder
-- height doesnt matter,should be big
+- extruder nozzle size .75mm
+- height doesnt matter, I used 100mm
 - no heated bed
 - marlin flavor
 - no start gcode (z moves can throw off layer detection)
 - other settings dont matter
 ### Profile settings:
-- At least one bottome layer
-- No bed adhesion
-- Layer height and initial layer height: 0.2 mm
-- Walls: (coming soon after experimentation)
-## How to draw an image
-1. Slice your image/model and save it to disk somewhere. 
-2. With RLBot, start a game on a snowy map with only Snowbot, unlimited time, and gravity at super high (helps with infill speed).
-3. Select your gcode file with the tkinter interface and press go!
+Use the profile `snowbot_solid.curaprofile`. To import it, press Ctrl+J to manage profiles and press the import button, then select the `.curaprofile`.
+## How to slice an image
+1. You don't neeed to do this if you want to use one of the test gcodes. Otherwise, open Cura.
+2. Hit the folder icon and open your image.
+3. The height should be .4, the base 0, and width should be 80 or less and depth 100 or less. Darker should be higher with a linear color model and 1% transmittance with 1 smoothing.
+4. Hit Ok to import your image.
+5. Clicking on the 3 sliders icon to open the print settings.
+6. If there's not a dropdown to select a profile, hit the Custom button.
+7. Select Snowbot solid from the profile dropdown.
+8. Press the Slice button.
+9. Once slicing has completed, preview the moves if you'd like, then save the gcode to disk somewhere.
+## How to draw an image gcode
+1. Slice your image/model and save it to disk somewhere or use one of the images in the `tests` folder/
+2. With RLBot, start a game on a mannfield-snowy with only Snowbot, unlimited time, gravity at super high, and max score at one (so you can end the game and save the replay).
+3. Browse with the bot's interface and press select file!
 ## Statesetting
-This bot currently uses statesetting to travel and to move the ball out of the way. If I have the time I will add inteligent movement to jump and aerial from one spot to another.
+This bot currently uses statesetting to travel and to move the ball out of the way. If I have the ~~time~~ motivation I will add inteligent movement to jump and aerial from one spot to another.
