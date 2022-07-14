@@ -34,6 +34,9 @@ class Bot(VirxERLU):
         self.current_instruction_num = -1
         self.current_gcode_type = None
         self.instructions = []
+
+        self.tp_countdown = 0
+        self.jump_tick = 0
         
     def load_gcode(self, filepath):
         layer_started = False
@@ -52,7 +55,7 @@ class Bot(VirxERLU):
                     if layer_mo and layer_mo.group(2) == "0.4":
                         self.logger.info(f"Last line of layer found (#{i+1}): {line}")
                         break
-                    self.instructions.append(GcodeInstruction(line, i))
+                    self.instructions.append(GcodeInstruction(line, i+1))
         except FileNotFoundError:
             self.logger.error(f"Could not find gcode file {filepath}")
             self.mode = "idle"
@@ -65,6 +68,7 @@ class Bot(VirxERLU):
 
     def run(self):
         # NOTE This method is ran every tick
+        self.jump_tick = (self.jump_tick + 1) % round(12/self.game.game_speed)
         ball_state = BallState(physics=Physics(location=Vector3(0, 0, -100)))
         game_state = GameState(ball=ball_state)
         self.set_game_state(game_state)
@@ -80,7 +84,16 @@ class Bot(VirxERLU):
                 self.handled_mode = True
         if self.mode == "idle":
             return
+        if self.current_instruction is not None:
+            self.renderer.begin_rendering()
+            self.renderer.draw_rect_2d(10, 50, 200, 50, False, self.renderer.cyan())
+            self.renderer.draw_rect_2d(10, 50, 200 * int(self.current_instruction_num / len(self.instructions)), 50, True, self.renderer.cyan())
+            self.renderer.draw_string_2d(10, 110, 2, 2, "Current line: {}/{}".format(self.current_instruction.line_number, self.instructions[len(self.instructions) - 1].line_number), self.renderer.cyan())
+            self.renderer.end_rendering()
         if self.is_clear():
+            if(self.tp_countdown > 0):
+                self.tp_countdown -= 1
+                return
             # time for the next instruction
             self.current_instruction_num += 1
             try:
@@ -104,11 +117,12 @@ class Bot(VirxERLU):
             if self.current_instruction.type is not None:
                 self.current_gcode_type = self.current_instruction.type
                 self.logger.info(f"gcode type is now {self.current_instruction.type}")
-            elif self.current_instruction.is_travel and False:
+            elif self.current_instruction.is_travel:
                 self.logger.info(f"Teleporting to {self.current_instruction.x}, {self.current_instruction.y} as commanded by line number {self.current_instruction.line_number}")
-                car_state = CarState(physics=Physics(location=Vector3(self.current_instruction.y,self.current_instruction.y, None)))
+                car_state = CarState(physics=Physics(location=Vector3(self.current_instruction.x,self.current_instruction.y, None)))
                 game_state = GameState(cars={self.index: car_state})
                 self.set_game_state(game_state)
+                self.tp_countdown = 4
             else:
                 # get a rotator pointing toward our destination
                 angle = arctan((self.me.location.y - self.current_instruction.y)/(self.me.location.x - self.current_instruction.x))
@@ -120,6 +134,12 @@ class Bot(VirxERLU):
                 self.logger.debug(f"Driving to {self.current_instruction.x}, {self.current_instruction.y}...")
                 # go there
                 self.push(routines.goto(Vector(self.current_instruction.x, self.current_instruction.y), brake=True))
+        else:
+            if self.current_gcode_type == "WALL-INNER" and self.jump_tick == 0 and not self.me.airborne:
+                self.logger.info(f"Wall inner detected, attempting jump...")
+                self.controller.jump = True
+            else:
+                self.controller.jump = False
 
 
     def demolished(self):

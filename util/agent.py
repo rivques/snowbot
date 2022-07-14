@@ -191,14 +191,18 @@ class VirxERLU(StandaloneBot):
 
     def line(self, start, end, color=None):
         if self.debugging and self.debug_lines:
+            self.renderer.begin_rendering()
             color = color if color is not None else self.renderer.grey()
             self.renderer.draw_line_3d(start.copy(), end.copy(), self.renderer.create_color(255, *color) if type(color) in {list, tuple} else color)
+            self.renderer.end_rendering()
 
     def polyline(self, vectors, color=None):
         if self.debugging and self.debug_lines:
+            self.renderer.begin_rendering()
             color = color if color is not None else self.renderer.grey()
             vectors = tuple(vector.copy() for vector in vectors)
             self.renderer.draw_polyline_3d(vectors, self.renderer.create_color(255, *color) if type(color) in {list, tuple} else color)
+            self.renderer.end_rendering()
 
     def sphere(self, location, radius, color=None):
         if self.debugging and self.debug_lines:
@@ -347,6 +351,7 @@ class VirxERLU(StandaloneBot):
                         print_exc(file=open(t_file, "a"))
 
                 if self.debugging:
+                    self.renderer.begin_rendering()
                     if self.debug_3d_bool:
                         if self.debug_stack_bool:
                             self.debug[0] = itertools.chain(self.debug[0], ("STACK:",), (item.__class__.__name__ for item in reversed(self.stack)))
@@ -396,6 +401,7 @@ class VirxERLU(StandaloneBot):
 
                     if self.debug_ball_path and self.ball_prediction_struct is not None:
                         self.polyline(tuple(Vector(ball_slice.physics.location.x, ball_slice.physics.location.y, ball_slice.physics.location.z) for ball_slice in self.ball_prediction_struct.slices[::self.debug_ball_path_precision]))
+                    self.renderer.end_rendering()
 
                 self.debug = [[], []]
 
@@ -783,6 +789,7 @@ class game_object:
         self.friend_score = 0
         self.foe_score = 0
         self.gravity = Vector()
+        self.game_speed = 1
 
     def update(self, team, packet: GameTickPacket):
         game = packet.game_info
@@ -795,6 +802,7 @@ class game_object:
         self.friend_score = packet.teams[team].score
         self.foe_score = packet.teams[not team].score
         self.gravity.z = game.world_gravity_z
+        self.game_speed = game.game_speed
 
 
 class Matrix3:

@@ -550,8 +550,8 @@ class goto:
         elif self.rule1_timer != -1:
             self.rule1_timer = -1
 
-        if agent.me.airborne:
-            agent.push(recovery(self.target))
+        # if agent.me.airborne:
+        #     agent.push(recovery(self.target))
         
 
 
