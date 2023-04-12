@@ -1,7 +1,7 @@
 import re
 
 class GcodeInstruction:
-    line_re = re.compile(r"^G(1|0)(?=.*x(-?\d*(\.\d*)))(?=.*y(-?\d*(\.\d*))).*", flags=re.IGNORECASE)
+    line_re = re.compile(r"^G(1|0)(?=.*x(-?\d*(\.\d*)?))(?=.*y(-?\d*(\.\d*)?)).*", flags=re.IGNORECASE)
     type_re = re.compile(r";TYPE:(.*)", flags=re.IGNORECASE)
     def __init__(self, line, line_number):
         self.line = line
@@ -19,6 +19,6 @@ class GcodeInstruction:
             if not line_mo:
                 self.valid = False
                 return
-            self.x = float(line_mo.group(2))*100
-            self.y = float(line_mo.group(4))*100
+            self.x = float(line_mo.group(2))*100-4096
+            self.y = float(line_mo.group(4))*100-5120
             self.is_travel = line_mo.group(1) == "0"

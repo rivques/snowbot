@@ -68,7 +68,8 @@ class Bot(VirxERLU):
 
     def run(self):
         # NOTE This method is ran every tick
-        self.jump_tick = (self.jump_tick + 1) % round(12/self.game.game_speed)
+        game_speed = self.game.game_speed if self.game.game_speed != 0 else 1
+        self.jump_tick = (self.jump_tick + 1) % round(12/game_speed)
         ball_state = BallState(physics=Physics(location=Vector3(0, 0, -100)))
         game_state = GameState(ball=ball_state)
         self.set_game_state(game_state)
@@ -98,6 +99,7 @@ class Bot(VirxERLU):
             self.current_instruction_num += 1
             try:
                 self.current_instruction = self.instructions[self.current_instruction_num]
+                print("Current line: {}/{} ({}%)".format(self.current_instruction.line_number, self.instructions[len(self.instructions) - 1].line_number, self.current_instruction.line_number/self.instructions[len(self.instructions) - 1].line_number))
             except IndexError:
                 self.mode = "idle"
                 self.handled_mode = False
@@ -135,8 +137,8 @@ class Bot(VirxERLU):
                 # go there
                 self.push(routines.goto(Vector(self.current_instruction.x, self.current_instruction.y), brake=True))
         else:
-            if self.current_gcode_type == "WALL-INNER" and self.jump_tick == 0 and not self.me.airborne:
-                self.logger.debug(f"Wall inner detected, attempting jump...")
+            if self.current_gcode_type == "FILL" and self.jump_tick == 0 and not self.me.airborne:
+                self.logger.debug(f"infill detected, attempting jump...")
                 self.controller.jump = True
             else:
                 self.controller.jump = False

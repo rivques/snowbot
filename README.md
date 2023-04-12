@@ -1,5 +1,5 @@
 # Snowbot
-A bot to draw Rocket League snow art. Runs on gcode like a CNC or 3D printer. Currently uses state-setting to travel but might be more intelligent in the future. The bot works best with images with few colors, preferably silhouettes. It is far from perfect and may decide to put a line across your image if it feels like it, but it's good enough and it will definetly get a likeness across.
+A bot to draw Rocket League snow art. Runs on gcode like a CNC or 3D printer. Currently uses state-setting to travel but might be more intelligent in the future. The bot works best with images with few colors, preferably silhouettes. It is far from perfect and may decide to put a line across your image if it feels like it, but it's good enough and it will definitely get a likeness across.
 ## How to set up Cura
 This bot uses gcode sliced by [Cura](https://ultimaker.com/software/ultimaker-cura) to run. It must be sliced using Cura so the gcode comments are predictable. Even though UE says that 1uu=10cm, this uses 1 gcode unit = 100uu so Cura can handle it. This will draw the bottom layer.
 ### Printer settings:
@@ -13,9 +13,9 @@ This bot uses gcode sliced by [Cura](https://ultimaker.com/software/ultimaker-cu
 - no start gcode (z moves can throw off layer detection)
 - other settings dont matter
 ### Profile settings:
-Use the profile `snowbot_solid.curaprofile`. To import it, press Ctrl+J to manage profiles and press the import button, then select the `.curaprofile`.
+Use the profile `snowbot_profile.curaprofile`. To import it, press Ctrl+J to manage profiles and press the import button, then select the `.curaprofile`.
 ## How to slice an image
-1. You don't neeed to do this if you want to use one of the example gcodes. Otherwise, open Cura.
+1. You don't need to do this if you want to use one of the example gcodes. Otherwise, open Cura.
 2. Hit the folder icon and open your image.
 3. The height should be .4, the base 0, and width should be 80 or less and depth 100 or less. Darker should be higher with a linear color model and 1% transmittance with 1 smoothing.
 4. Hit Ok to import your image.
@@ -25,8 +25,8 @@ Use the profile `snowbot_solid.curaprofile`. To import it, press Ctrl+J to manag
 8. Press the Slice button.
 9. Once slicing has completed, preview the moves if you'd like, then save the gcode to disk somewhere.
 ## How to draw an image gcode
-1. Slice your image/model and save it to disk somewhere or use one of the image gcodes in the `examples` folder on the github
-2. With RLBot, start a game on a mannfield-snowy with only Snowbot, unlimited time, gravity at super high, and max score at one (so you can end the game and save the replay).
+1. Slice your image/model and save it to disk somewhere or use one of the image gcodes in the `examples` folder on the github (Note: example gcodes may break/be out of date)
+2. Using RLBot, start a game on a beckwithPark-snowy with only Snowbot, unlimited time, gravity at super high, and max score at one (so you can end the game and save the replay). Note that having BakkesMod loaded may prevent the gravity mutator from being set properly, so if the gravity is wrong, quit bakkesmod, restart Rocket League, and try again.
 3. Browse with the bot's interface and press select file.
 4. Wait for the bot to finish. Be aware that many things will reset the progress, including opening the game settings.
 5. Take a screenshot of the art if you wish.
